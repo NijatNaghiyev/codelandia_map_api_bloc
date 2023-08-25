@@ -45,55 +45,63 @@ class _MyAppState extends State<MyApp> {
                 );
               case UserLoadedState:
                 final stateData = state as UserLoadedState;
-                return ListView.builder(
-                  itemCount: stateData.usersList.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 5,
-                      margin: const EdgeInsets.all(8),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.transparent,
-                            backgroundImage:
-                                NetworkImage(stateData.usersList[index].image),
+                // ! Refresh
+                return RefreshIndicator(
+                  color: Colors.teal,
+                  onRefresh: () async => userBloc.add(UserInitialEvent()),
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: stateData.usersList.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 5,
+                        margin: const EdgeInsets.all(8),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: NetworkImage(
+                                  stateData.usersList[index].image),
+                            ),
+                            title: Text(
+                                '${stateData.usersList[index].id}. ${stateData.usersList[index].firstName} ${stateData.usersList[index].lastName}'),
+                            trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                        'Age: ${stateData.usersList[index].age}'),
+                                    const SizedBox(width: 10),
+                                    Icon(
+                                      stateData.usersList[index].gender ==
+                                              'male'
+                                          ? Icons.male
+                                          : Icons.female,
+                                      color:
+                                          stateData.usersList[index].gender ==
+                                                  'male'
+                                              ? Colors.blue
+                                              : Colors.pink,
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                    'Hair color: ${stateData.usersList[index].hair.color}'),
+                                Text(
+                                    'Type: ${stateData.usersList[index].hair.type}'),
+                              ],
+                            ),
+                            subtitle: Text(
+                                'Address: ${stateData.usersList[index].address.address}, City: ${stateData.usersList[index].address.city}'),
                           ),
-                          title: Text(
-                              '${stateData.usersList[index].id}. ${stateData.usersList[index].firstName} ${stateData.usersList[index].lastName}'),
-                          trailing: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                      'Age: ${stateData.usersList[index].age}'),
-                                  const SizedBox(width: 10),
-                                  Icon(
-                                    stateData.usersList[index].gender == 'male'
-                                        ? Icons.male
-                                        : Icons.female,
-                                    color: stateData.usersList[index].gender ==
-                                            'male'
-                                        ? Colors.blue
-                                        : Colors.pink,
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                  'Hair color: ${stateData.usersList[index].hair.color}'),
-                              Text(
-                                  'Type: ${stateData.usersList[index].hair.type}'),
-                            ],
-                          ),
-                          subtitle: Text(
-                              'Address: ${stateData.usersList[index].address.address}, City: ${stateData.usersList[index].address.city}'),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               case UserErrorState:
                 final errorState = state as UserErrorState;
