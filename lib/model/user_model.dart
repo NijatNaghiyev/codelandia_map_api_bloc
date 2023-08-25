@@ -1,19 +1,12 @@
-// To parse this JSON data, do
-
 class User {
   final int id;
   final String firstName;
   final String lastName;
   final int age;
-  final Gender gender;
-  final String email;
-  final String phone;
-  final String username;
-  final String password;
-  final DateTime birthDate;
+  final String gender;
   final String image;
   final Address address;
-  final String university;
+  final Hair hair;
 
   User({
     required this.id,
@@ -21,14 +14,9 @@ class User {
     required this.lastName,
     required this.age,
     required this.gender,
-    required this.email,
-    required this.phone,
-    required this.username,
-    required this.password,
-    required this.birthDate,
     required this.image,
     required this.address,
-    required this.university,
+    required this.hair,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -36,33 +24,11 @@ class User {
         firstName: json["firstName"],
         lastName: json["lastName"],
         age: json["age"],
-        gender: genderValues.map[json["gender"]]!,
-        email: json["email"],
-        phone: json["phone"],
-        username: json["username"],
-        password: json["password"],
-        birthDate: DateTime.parse(json["birthDate"]),
+        gender: json["gender"],
         image: json["image"],
         address: Address.fromJson(json["address"]),
-        university: json["university"],
+        hair: Hair.fromJson(json["hair"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "firstName": firstName,
-        "lastName": lastName,
-        "age": age,
-        "gender": genderValues.reverse[gender],
-        "email": email,
-        "phone": phone,
-        "username": username,
-        "password": password,
-        "birthDate":
-            "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",
-        "image": image,
-        "address": address.toJson(),
-        "university": university,
-      };
 }
 
 class Address {
@@ -78,25 +44,19 @@ class Address {
         address: json["address"],
         city: json["city"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "address": address,
-        "city": city,
-      };
 }
 
-enum Gender { FEMALE, MALE }
+class Hair {
+  final String color;
+  final String type;
 
-final genderValues = EnumValues({"female": Gender.FEMALE, "male": Gender.MALE});
+  Hair({
+    required this.color,
+    required this.type,
+  });
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
+  factory Hair.fromJson(Map<String, dynamic> json) => Hair(
+        color: json["color"],
+        type: json["type"],
+      );
 }

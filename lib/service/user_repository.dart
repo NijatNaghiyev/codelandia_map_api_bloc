@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 class UserRepository {
   List<User> users = [];
+  UserRepository();
   Future<List<User>?> fetchData() async {
     var url = 'https://dummyjson.com/users';
     Response response = await Dio().get(url);
@@ -11,10 +12,11 @@ class UserRepository {
         var jsonData = response.data['users'] as List;
         return jsonData.map((e) => User.fromJson(e)).toList();
       } else {
-        throw ('******************Else: ${response.statusCode}');
+        print('******************Else: ${response.statusCode}');
       }
     } catch (e) {
-      throw ("***************$e: Status code: ${response.statusCode}");
+      print("***************$e: Status code: ${response.statusCode}");
     }
+    return null;
   }
 }
